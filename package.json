@@ -1,0 +1,33 @@
+{
+  "name": "boson-grapher",
+  "version": "1.0.0",
+  "description": "An advanced Open-Source graphing tool inspired by Desmos.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BosonMath/boson-grapher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BosonMath/boson-grapher/issues"
+  },
+  "homepage": "https://github.com/BosonMath/boson-grapher#readme",
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "bootstrap": "^4.1.3",
+    "d3": "^5.7.0",
+    "mathjs": "^5.2.3",
+    "next": "^7.0.2",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-icons": "^3.2.2",
+    "reactstrap": "^6.5.0"
+  }
+}
