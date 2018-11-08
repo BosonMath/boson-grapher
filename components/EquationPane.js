@@ -9,20 +9,27 @@ export default class EquationPane extends React.Component {
         super(props);
         this.parent = props.parent;
         this.addEq = this.addEq.bind(this);
+        this.addEquation = this.addEquation.bind(this);
         this.eqEntry = this.eqEntry.bind(this);
         this.changey = this.changey.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
         var entries = [
-            // { name: 0, content: "m(n,Z)=n<1?Z:((m(n-1,Z))^2+Z)" },
-            // { name: 1, content: "e^re(log(m(3,x+y*i)))==2" },
-            // { name: 2, content: "c(z,M)=e^re(log(z))>M?M+1:z" },
-            {name:0,content:"x^2+y^2==1"},
-            {name:1,content:"sin(x/(x^2+y^2))==cos(y/(x^2+y^2))"}
-            // { name: 0, content: "h=o" },
-            // { name: 1, content: "o=2" },
-            //  { name: 0, content: "f(z,n)=n<1?z:c(z*sin(f(z,n-1)),200)" },
-            // { name: 1, content: "re(log(f(x+y*i,7)))==log(2)" },
-            // {name:2, content:"c(z,M)=e^re(log(z))>M?M+1:z"},
+            // { name: 0, content: "m(n,Z)=n<1?Z:c(((m(n-1,Z))^2+Z),20)" ,graphed:false},
+            // { name: 1, content: "e^re(log(m(7,x+y*i)))==2" ,graphed:false},
+            // { name: 2, content: "c(z,M)=e^re(log(z))>M?M+1:z" ,graphed:false},
+            // { name: 3, content: "((x-0.25)^2+y^2)^0.5==sin(atan2(-x+0.25,y))/2+1/2" ,graphed:false},
+            // { name: 4, content: "(x+1)^2+y^2==0.25^2" ,graphed:false},
+            // {name:0,content:"cos(pi/2*x/(x^2+y^2))*cos(pi/2*y/(x^2+y^2))==0",graphed:false},
+            // {name:1,content:"(mod(x/(x^2+y^2+0.001),2)-1)^2+(mod(y/(x^2+y^2+0.001),2)-1)^2==1",graphed:false},
+            {name:0,content:"1/sqrt(2)-cos(10x/(x^2+y^2))^2>cos(10y/(x^2+y^2))^2",graphed:false},
+            {name:1,content:"1/sqrt(2)-sin(10x/(x^2+y^2))^2>sin(10y/(x^2+y^2))^2",graphed:false},
+            
+            
+            // { name: 0, content: "h=o" ,graphed:false},
+            // { name: 1, content: "o=2" ,graphed:false},
+            //  { name: 0, content: "f(z,n)=n<1?z:c(z*sin(f(z,n-1)),200)" ,graphed:false},
+            // { name: 1, content: "re(log(f(x+y*i,7)))==log(2)",graphed:false },
+            // {name:2, content:"c(z,M)=e^re(log(z))>M?M+1:z",graphed:false},
 
         ];
         this.state = {
@@ -44,9 +51,11 @@ export default class EquationPane extends React.Component {
         var goes = this.state.entries.length;
         var ok = [];
         for (var i = 0; i < goes; i++) {
-            this.state.entries[i].el.handleDependencies(this.state.entries[i].el.state);
-            if (this.state.entries[i].el.state.enabled) {
-                ok.push([i, this.state.entries[i].el.state.requires, this.state.entries[i].el.state.provides, true]);
+            if(this.state.entries[i].el){
+                this.state.entries[i].el.handleDependencies(this.state.entries[i].el.state);
+                if (this.state.entries[i].el.state.enabled) {
+                    ok.push([i, this.state.entries[i].el.state.requires, this.state.entries[i].el.state.provides, true]);
+                }
             }
         }
         for (var j = 0; j < goes + 1; j++) {
@@ -76,7 +85,7 @@ export default class EquationPane extends React.Component {
             evaled[j] = false;
             ok[j][1] = this.state.entries[ok[j][0]].el.state.requires;
         }
-        console.log("ok", ok);
+        //console.log("ok", ok);
         for (var j = 0; j < ok.length; j++) {
             var toEval = [j];
             var l = 0;
@@ -85,13 +94,16 @@ export default class EquationPane extends React.Component {
                 if (!evaled[tt]) {
                     var i = ok[tt][0];
                     var reqs = this.state.entries[i].el.state.requires.map(depo => ok.findIndex(y => y[2].includes(depo)));
-                    var ind = reqs.findIndex(p => !evaled[p] && p !== tt);
+                    //console.log(tt,"sps",reqs);
+                    var ind = reqs.find(p => !evaled[p] && (p !== tt));
                     if (!(ind >= 0)) {
+                        
                         if (this.state.entries[i].el.state.enabled) {
                             this.state.entries[i].el.handleThing(this.state.entries[i].el.state);
                         }
                         evaled[tt] = true;
                         toEval.pop();
+                        //console.log(tt,"sp",toEval);
                     } else {
                         toEval.push(ind);
                     }
@@ -102,7 +114,7 @@ export default class EquationPane extends React.Component {
             }
 
         }
-        console.log(evaled);
+        //console.log(evaled);
         // for (var i = 0; i < goes; i++) {
         //     for (var j = 0; j < this.state.entries.length; j++) {
         //         var m=j;
@@ -111,20 +123,35 @@ export default class EquationPane extends React.Component {
         //         }
         //     }
         // }
-        this.parent.state.graphPane.clear();
+        //this.parent.state.graphPane.clear();
         for (var i = 0; i < goes; i++) {
-            if (this.state.entries[i].el.state.enabled) {
-                this.parent.state.graphPane.graph(this.state.entries[i].el.state.equation, this.state.parser,"hsl("+Math.floor(360*Math.random())+",100%,50%)");
+            if(this.state.entries[i].el){
+                if (this.state.entries[i].el.state.enabled) {
+                    var hue=Math.floor(360*Math.random());
+                    this.parent.state.graphPane.graph(this.state.entries[i].el.state.equation, this.state.parser,this.state.entries[i].name,"hsl("+hue+",100%,80%)","hsl("+hue+",100%,40%)");
+                }else{
+                    this.parent.state.graphPane.clearId(this.state.entries[i].name);
+                }
             }
         }
     }
     handleRemove(v) {
+        var removing=this.state.entries.filter(x => (x.el === v));
         this.state.entries = this.state.entries.filter(x => (x.el !== v));
+        if(removing.length>0){
+            this.parent.state.graphPane.clearId(removing[0].name);
+        }
         this.setState({ entries: this.state.entries });
     }
     addEq() {
-        this.state.entries.push({ name: this.state.addSt++, content: "0" });
+        this.state.entries.push({ name: this.state.addSt++, content: "0" ,graphed:false});
         this.setState({ entries: this.state.entries });
+        this.changey();
+    }
+    addEquation(text) {
+        this.state.entries.push({ name: this.state.addSt++, content: text ,graphed:false});
+        this.setState({ entries: this.state.entries });
+        this.changey();
     }
     eqEntry(eq) {
         var toRet =
