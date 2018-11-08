@@ -8,11 +8,14 @@ export default class GraphingCalc extends React.Component {
   constructor(props) {
     super(props);
     this.addListener = this.addListener.bind(this);
+    this.addEquation = this.addEquation.bind(this);
+    this.pAndR = this.pAndR.bind(this);
+    this.clearListener = this.clearListener.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
     this.graphListener = this.graphListener.bind(this);
     this.doTasks = this.doTasks.bind(this);
     this.state = {
-      taskQueue: [],//[{ requirements: [], instruction: { type: "addEq", data: "y^2==1-x^2" } }],
+      taskQueue: [],//[{ requirements: [], instruction: { type: "addEq", data: {text:"y^2==1-x^2"} } }],
       listeners: [],
       equationPane: null,
       graphPane: null,
@@ -21,11 +24,19 @@ export default class GraphingCalc extends React.Component {
     this.addListener("addEq", this.graphListener);
   }
   addListener(type, fn) {
-    this.state.listeners.push({ id:this.state.listenerCounter,type: type, fn: fn });
+    this.state.listeners.push({ id: this.state.listenerCounter, type: type, fn: fn });
     return this.state.listenerCounter++;
+  }
+  clearListener(id) {
+    this.state.listeners = this.state.listeners.filter(x => x.id !== id);
   }
   graphListener(event) {
     console.log("graph listener", event)
+  }
+  addEquation(data){
+    this.state.equationPane.state.entries.push({ name: this.state.equationPane.state.addSt++, content: data.text ,graphed:false});
+    this.state.equationPane.setState({ entries: this.state.equationPane.state.entries });
+    return this.state.equationPane.state.addSt;
   }
   pAndR(allEq) {
     var res = { provides: [], requires: [], requiresCoords: false };
@@ -113,9 +124,11 @@ export default class GraphingCalc extends React.Component {
       var task = readyTasks[0];
       this.state.taskQueue = this.state.taskQueue.filter(x => x !== task);
       var instruction = task.instruction;
+      var response={};
       if (instruction.type == "addEq") {
-        this.state.equationPane.addEquation(instruction.data);
+        response=this.addEquation(instruction.data);
       }
+      instruction.response=response;
       for (var i = 0; i < this.state.listeners.length; i++) {
         if (this.state.listeners[i].type == instruction.type) {
           this.state.listeners[i].fn(instruction);

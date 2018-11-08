@@ -21,12 +21,16 @@ export default class EquationPane extends React.Component {
             // { name: 4, content: "(x+1)^2+y^2==0.25^2" ,graphed:false},
             // {name:0,content:"cos(pi/2*x/(x^2+y^2))*cos(pi/2*y/(x^2+y^2))==0",graphed:false},
             // {name:1,content:"(mod(x/(x^2+y^2+0.001),2)-1)^2+(mod(y/(x^2+y^2+0.001),2)-1)^2==1",graphed:false},
+
             {name:0,content:"1/sqrt(2)-cos(10x/(x^2+y^2))^2>cos(10y/(x^2+y^2))^2",graphed:false},
             {name:1,content:"1/sqrt(2)-sin(10x/(x^2+y^2))^2>sin(10y/(x^2+y^2))^2",graphed:false},
             
             
-            // { name: 0, content: "h=o" ,graphed:false},
-            // { name: 1, content: "o=2" ,graphed:false},
+            // { name: 0, content: "m(n,Z)=n<1?Z:c(((m(n-1,Z))^2+q),20)" ,graphed:false},
+            // { name: 1, content: "abs(m(4,x+y*i))==2" ,graphed:false},
+            // { name: 2, content: "c(z,M)=abs(z)>M?M+1:z" ,graphed:false},
+            // { name: 3, content: "q=0.5" ,graphed:false},
+
             //  { name: 0, content: "f(z,n)=n<1?z:c(z*sin(f(z,n-1)),200)" ,graphed:false},
             // { name: 1, content: "re(log(f(x+y*i,7)))==log(2)",graphed:false },
             // {name:2, content:"c(z,M)=e^re(log(z))>M?M+1:z",graphed:false},
@@ -128,7 +132,7 @@ export default class EquationPane extends React.Component {
             if(this.state.entries[i].el){
                 if (this.state.entries[i].el.state.enabled) {
                     var hue=Math.floor(360*Math.random());
-                    this.parent.state.graphPane.graph(this.state.entries[i].el.state.equation, this.state.parser,this.state.entries[i].name,"hsl("+hue+",100%,80%)","hsl("+hue+",100%,40%)");
+                    this.parent.state.graphPane.graph(this.state.entries[i].el.state.equation, this.state.parser,this.state.entries[i].name,"hsla("+hue+",100%,50%,50%)","hsl("+hue+",100%,40%)");
                 }else{
                     this.parent.state.graphPane.clearId(this.state.entries[i].name);
                 }
