@@ -15,7 +15,7 @@ export default class GraphingCalc extends React.Component {
     this.graphListener = this.graphListener.bind(this);
     this.doTasks = this.doTasks.bind(this);
     this.state = {
-      taskQueue: [],//[{ requirements: [], instruction: { type: "addEq", data: {text:"y^2==1-x^2"} } }],
+      taskQueue: [],//[{ requirements: [], instruction: { type: "addEq", data: {text:"y^2==j-x^2"} } },{ requirements: [], instruction: { type: "addEq", data: {text:"j=2^2"} } }],
       listeners: [],
       equationPane: null,
       graphPane: null,

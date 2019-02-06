@@ -29,8 +29,60 @@ export default class GraphPane extends React.Component {
             m[i].path.remove();
         }
     }
+    componentDidMount() {
+        var svg=this.state.svg;
+        var center = { x: 0, y: 0 };
+        var viewSize = 5;
+        var width = this.state.svg.attr("width");
+        var height = this.state.svg.attr("height");
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+        x.domain([-viewSize/2,viewSize/2]);
+        y.domain([-viewSize/2*height/width,viewSize/2*height/width]);
+        // gridlines in x axis function
+function make_x_gridlines() {		
+    return d3.axisBottom(x)
+        .ticks(5)
+}
+
+// gridlines in y axis function
+function make_y_gridlines() {		
+    return d3.axisLeft(y)
+        .ticks(5)
+}
+// add the X gridlines
+svg.append("g")			
+.attr("class", "grid")
+.attr("transform", "translate(0," + height + ")")
+.call(make_x_gridlines()
+    .tickSize(-height)
+    .tickFormat("")
+)
+
+// add the Y gridlines
+svg.append("g")			
+.attr("class", "grid")
+.call(make_y_gridlines()
+    .tickSize(-width)
+    .tickFormat("")
+)
+
+
+// add the X Axis
+svg.append("g")
+.attr("transform", "translate(0," + height/2 + ")")
+.call(d3.axisBottom(x));
+
+// add the Y Axis
+svg.append("g").attr("transform", "translate(" + (width/2) + "," + 0 + ")")
+.call(d3.axisRight(y));
+
+    }
     graph(equation, parser,name,colorFill,colorStroke) {
         var alleq = equation;
+        var reso = 300;
+        var center = { x: 0, y: 0 };
+                var viewSize = 5;
         try {
             var allNodes = math.parse(alleq);
             var fmtTxt=allNodes.toString();
@@ -47,13 +99,12 @@ export default class GraphPane extends React.Component {
 
                 var width = this.state.svg.attr("width");
                 var height = this.state.svg.attr("height");
-                var reso = 300;
+                
                 var n = reso, m = Math.floor(reso / width * height);
                 var ns2=n-2;
                 var ms2=m-2;
                 var values = new Array(n * m);
-                var center = { x: 0, y: 0 };
-                var viewSize = 5;
+                
                 var st=new Date().getTime();
                 var nm=n*m;
                 var x=0;
@@ -103,13 +154,12 @@ export default class GraphPane extends React.Component {
 
                 var width = this.state.svg.attr("width");
                 var height = this.state.svg.attr("height");
-                var reso = 300;
+  
                 var n = reso, m = Math.floor(reso / width * height);
                 var ns2=n-2;
                 var ms2=m-2;
                 var values = new Array(n * m);
-                var center = { x: 0, y: 0 };
-                var viewSize = 5;
+                
                 var st=new Date().getTime();
                 var nm=n*m;
                 var x=0;
@@ -160,13 +210,11 @@ export default class GraphPane extends React.Component {
 
                 var width = this.state.svg.attr("width");
                 var height = this.state.svg.attr("height");
-                var reso = 200;
                 var n = reso, m = Math.floor(reso / width * height);
                 var ns2=n-2;
                 var ms2=m-2;
                 var values = new Array(n * m);
-                var center = { x: 0, y: 0 };
-                var viewSize = 5;
+           
                 var st=new Date().getTime();
                 var nm=n*m;
                 var x=0;

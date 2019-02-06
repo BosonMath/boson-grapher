@@ -14,16 +14,19 @@ export default class EquationPane extends React.Component {
         this.changey = this.changey.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
         var entries = [
-            // { name: 0, content: "m(n,Z)=n<1?Z:c(((m(n-1,Z))^2+Z),20)" ,graphed:false},
-            // { name: 1, content: "e^re(log(m(7,x+y*i)))==2" ,graphed:false},
-            // { name: 2, content: "c(z,M)=e^re(log(z))>M?M+1:z" ,graphed:false},
+            { name: 0, content: "m(n,Z)=n<1?Z:c(((m(n-1,Z))^2+Z),20)" ,graphed:false},
+            { name: 1, content: "abs(m(7,x+y*i))==2" ,graphed:false},
+            { name: 2, content: "c(z,M)=abs(z)>M?M+1:z" ,graphed:false},
+            // { name: 0, content: "C=[[cos(0+pi/17),sin(0+pi/17)],[cos(2pi/3+pi/17),sin(2pi/3+pi/17)],[cos(4pi/3+pi/17),sin(4pi/3+pi/17)]]" ,graphed:false},
+            
+            // { name: 0, content: "x>y" ,graphed:false},
             // { name: 3, content: "((x-0.25)^2+y^2)^0.5==sin(atan2(-x+0.25,y))/2+1/2" ,graphed:false},
             // { name: 4, content: "(x+1)^2+y^2==0.25^2" ,graphed:false},
             // {name:0,content:"cos(pi/2*x/(x^2+y^2))*cos(pi/2*y/(x^2+y^2))==0",graphed:false},
             // {name:1,content:"(mod(x/(x^2+y^2+0.001),2)-1)^2+(mod(y/(x^2+y^2+0.001),2)-1)^2==1",graphed:false},
 
-            {name:0,content:"1/sqrt(2)-cos(10x/(x^2+y^2))^2>cos(10y/(x^2+y^2))^2",graphed:false},
-            {name:1,content:"1/sqrt(2)-sin(10x/(x^2+y^2))^2>sin(10y/(x^2+y^2))^2",graphed:false},
+            // {name:0,content:"1/sqrt(2)-cos(10x/(x^2+y^2))^2>cos(10y/(x^2+y^2))^2",graphed:false},
+            // {name:1,content:"1/sqrt(2)-sin(10x/(x^2+y^2))^2>sin(10y/(x^2+y^2))^2",graphed:false},
             
             
             // { name: 0, content: "m(n,Z)=n<1?Z:c(((m(n-1,Z))^2+q),20)" ,graphed:false},
